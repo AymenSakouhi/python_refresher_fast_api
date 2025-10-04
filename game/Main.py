@@ -1,10 +1,16 @@
-from Enemy import *
+"""Learning everything python and this time about inheritance"""
+
+from Zombie import *
+from Ogre import *
 
 
-dragon = Enemy("Dragon", 15, 2)
+zombie = Zombie(15, 2)
+ogre = Ogre(20, 2)
 
-dragon.talk()
-dragon.walk_forward()
-dragon.attack()
+zombie.talk()
+zombie.walk_forward()
+zombie.attack()
+zombie.spead_disease()
 
-print(dragon.get_type_of_enemy())
+ogre.talk()
+ogre.charge()
