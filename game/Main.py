@@ -1,13 +1,12 @@
 from Enemy import *
 
 
-enemy = Enemy()
-enemy.type_of_enemy = "Zombie"
+dragon = Enemy("Dragon", 15, 2)
 
-enemy.talk()
-enemy.walk_forward()
-enemy.attack()
+dragon.talk()
+dragon.walk_forward()
+dragon.attack()
 
 print(
-    f"{enemy.type_of_enemy} has {enemy.health_points} health and can do an attack of {enemy.attack_damage}"
+    f"{dragon.type_of_enemy} has {dragon.health_points} health and can do an attack of {dragon.attack_damage}"
 )
