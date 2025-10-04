@@ -23,6 +23,11 @@ BOOKS = [
         "author": "Aymen",
         "category": "Biography",
     },
+    {
+        "title": "Sakouhi From Zero to Top",
+        "author": "Aymen",
+        "category": "Biography",
+    },
 ]
 
 
@@ -65,7 +70,26 @@ async def read_author_by_query(book_author: str, category: str):
 
 @app.post("/books/create_book")
 async def create_book(
-    new_book=Body(),
+    new_book: dict[str, str] = Body(...),
 ):
     """Adding a new book"""
     BOOKS.append(new_book)
+
+
+@app.put("/book/update_book")
+async def update_book(new_book=Body()):
+    """Updating a book with new infos"""
+    for i, x in enumerate(BOOKS):
+        if BOOKS[i].get("title").casefold() == new_book.get("title").casefold():
+            BOOKS[i] = new_book
+    return new_book
+
+
+@app.delete("/book/{book_title}")
+async def delete_book(book_title: str):
+    """Deleting a book from the list"""
+    for i, book in enumerate(BOOKS):
+        if book.get("title").casefold() == book_title.casefold():
+            BOOKS.pop(i)
+            break
+    return {"message": "book removed"}
