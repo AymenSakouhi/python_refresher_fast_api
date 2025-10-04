@@ -26,3 +26,11 @@ class Enemy:
     def attack(self):
         """attacking with self.attack_damage"""
         print(f"{self.__type_of_enemy} attacks for {self.attack_damage}")
+
+    def specia_attack(self):
+        """
+        Purpose: special attack for enemy
+        """
+        print("No special attack")
+
+    # end def

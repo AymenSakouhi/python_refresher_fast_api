@@ -2,15 +2,10 @@
 
 from Zombie import *
 from Ogre import *
+from Battle import battle
 
 
-def battle(e: Enemy):
-    e.talk()
-    e.attack()
+zombie = Zombie(10, 1)
+ogre = Ogre(15, 2)
 
-
-zombie = Zombie(15, 2)
-ogre = Ogre(20, 2)
-
-battle(zombie)
-battle(ogre)
+battle(zombie, ogre)

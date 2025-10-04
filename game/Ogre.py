@@ -1,3 +1,4 @@
+import random
 from Enemy import *
 
 
@@ -15,3 +16,9 @@ class Ogre(Enemy):
     def charge(self):
         """charging at you with full speed"""
         print("charging at you")
+
+    def specia_attack(self):
+        did_special_attack_happen = random.random() < 0.20
+        if did_special_attack_happen:
+            print("Ogre special attack, raising attack damage to 4")
+            self.attack_damage += 4
