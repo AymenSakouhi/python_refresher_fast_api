@@ -7,6 +7,4 @@ dragon.talk()
 dragon.walk_forward()
 dragon.attack()
 
-print(
-    f"{dragon.type_of_enemy} has {dragon.health_points} health and can do an attack of {dragon.attack_damage}"
-)
+print(dragon.get_type_of_enemy())
