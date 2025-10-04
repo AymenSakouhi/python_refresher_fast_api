@@ -4,13 +4,13 @@ from Zombie import *
 from Ogre import *
 
 
+def battle(e: Enemy):
+    e.talk()
+    e.attack()
+
+
 zombie = Zombie(15, 2)
 ogre = Ogre(20, 2)
 
-zombie.talk()
-zombie.walk_forward()
-zombie.attack()
-zombie.spead_disease()
-
-ogre.talk()
-ogre.charge()
+battle(zombie)
+battle(ogre)
