@@ -1,5 +1,6 @@
 """Everything protected here"""
 
+from datetime import timedelta, datetime, timezone
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
@@ -7,6 +8,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
+from jose import jwt
 
 
 from app.models import Users
@@ -14,6 +16,9 @@ from app.database import sessionLocal
 
 
 router = APIRouter()
+
+SECRET_KEY = "c3f7aca8f9f5ca94f18a7169ccfe44c935fdbc6e07c10d9380c54f26445cf299"
+ALGORITHM = "HS256"
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -43,7 +48,16 @@ def authenticate_user(username: str, password: str, db: db_dependency):
         return False
     if not bcrypt_context.verify(password, user.hashed_password):
         return False
-    return True
+    return user
+
+
+def create_access_token(username: str, user_id: int, expires_delta: timedelta):
+    """do the jwt token here"""
+    encode = {"sub": username, "id": user_id}
+    expires = datetime.now(timezone.utc) + expires_delta
+
+    encode.update({"exp": expires})
+    return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
 class CreateUserRequest(BaseModel):
@@ -70,6 +84,11 @@ class CreateUserRequest(BaseModel):
     }
 
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
 @router.post("/auth/")
 async def create_user(db: db_dependency, create_user_request: CreateUserRequest):
     """User auth route example"""
@@ -90,7 +109,7 @@ async def create_user(db: db_dependency, create_user_request: CreateUserRequest)
     return create_user_model
 
 
-@router.post("/token")
+@router.post("/token", response_model=Token)
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: db_dependency
 ):
@@ -98,4 +117,5 @@ async def login_for_access_token(
     user = authenticate_user(form_data.username, form_data.password, db)
     if not user:
         return "Failed Authentication"
-    return "Successful Authentication"
+    token = create_access_token(user.username, user.id, timedelta(minutes=20))
+    return {"access_token": token, "token_type": "bearer"}
