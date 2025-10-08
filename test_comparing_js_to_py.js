@@ -40,3 +40,57 @@ temp.insertValue(6);
 temp.removeValue(4);
 console.log(temp.getRandomValue());
 // solved this in 5 mins. the guy in the vid is just too much
+
+// Another Mock interview from google that I had personally and solved in 55 mins.
+
+const fileLogs = `2017-02-01T20:00 OperationA Start
+              2017-02-01T20:01 OperationA End
+              2017-02-01T20:08 OperationB Start
+              2017-02-01T20:09 OperationC Start
+              2017-02-01T20:10 OperationB End
+              2017-02-01T20:12 OperationC End`;
+
+const fileLogsOperations = fileLogs.split('\n').map((e) => e.trim());
+console.log(fileLogsOperations);
+
+const arrOfCompletedLogsDurations = [];
+
+for (var i = 0; i < fileLogsOperations.length; i++) {
+  // format = "2017-02-01T20:00 OperationA Start"
+  const name = fileLogsOperations[i].split(' ')[1];
+  const indexOfStart = fileLogsOperations[i].includes(' Start');
+
+  if (fileLogsOperations[i].includes(name) && indexOfStart) {
+    const endIndex = fileLogsOperations.findIndex(
+      (ele) => ele.includes(' End') && ele.includes(name)
+    );
+    console.log(endIndex);
+
+    if (endIndex) {
+      arrOfCompletedLogsDurations.push(
+        new Date(fileLogsOperations[endIndex].split(' ')[0]) -
+          new Date(fileLogsOperations[i].split(' ')[0])
+      );
+    }
+  }
+}
+
+// [duration1, duration2, duration3]
+
+const average =
+  arrOfCompletedLogsDurations.reduce((acc, curr) => acc + curr, 0) /
+  arrOfCompletedLogsDurations.length;
+
+// Print average duration in "X days, Y hours, Z minutes, W seconds" format
+function formatDuration(ms) {
+  let totalSeconds = Math.floor(ms / 1000);
+  const days = Math.floor(totalSeconds / (24 * 3600));
+  totalSeconds %= 24 * 3600;
+  const hours = Math.floor(totalSeconds / 3600);
+  totalSeconds %= 3600;
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+}
+
+console.log(formatDuration(average));
